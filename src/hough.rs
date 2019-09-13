@@ -209,9 +209,13 @@ fn degrees_to_radians(degrees: u32) -> f32 {
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use image::{GrayImage, ImageBuffer, Luma};
     use test::{black_box, Bencher};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
     fn assert_points_eq(
         actual: Option<((f32, f32), (f32, f32))>,
@@ -240,7 +244,8 @@ mod tests {
         }
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn intersection_points_zero_signed_distance() {
         // Vertical
         assert_points_eq(
@@ -305,7 +310,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn intersection_points_positive_signed_distance() {
         // Vertical intersecting image
         assert_points_eq(
@@ -369,7 +375,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn intersection_points_negative_signed_distance() {
         // Vertical
         assert_points_eq(
@@ -428,7 +435,8 @@ mod tests {
         image
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn detect_lines_horizontal_below_threshold() {
         let image = separated_horizontal_line_segment();
         let options = LineDetectionOptions {
@@ -439,7 +447,8 @@ mod tests {
         assert_eq!(detected.len(), 0);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn detect_lines_horizontal_above_threshold() {
         let image = separated_horizontal_line_segment();
         let options = LineDetectionOptions {
@@ -472,7 +481,8 @@ mod tests {
         image
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn draw_polar_line_horizontal() {
         let actual = image_with_polar_line(5, 5, 2.0, 90, Luma([1]));
         let expected = gray_image!(
@@ -484,7 +494,8 @@ mod tests {
         assert_pixels_eq!(actual, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn draw_polar_line_vertical() {
         let actual = image_with_polar_line(5, 5, 2.0, 0, Luma([1]));
         let expected = gray_image!(
@@ -496,7 +507,8 @@ mod tests {
         assert_pixels_eq!(actual, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn draw_polar_line_bottom_left_to_top_right() {
         let actual = image_with_polar_line(5, 5, 3.0, 45, Luma([1]));
         let expected = gray_image!(
@@ -508,7 +520,8 @@ mod tests {
         assert_pixels_eq!(actual, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn draw_polar_line_top_left_to_bottom_right() {
         let actual = image_with_polar_line(5, 5, 0.0, 135, Luma([1]));
         let expected = gray_image!(
@@ -522,7 +535,8 @@ mod tests {
 
     macro_rules! test_detect_line {
         ($name:ident, $r:expr, $angle:expr) => {
-            #[test]
+            #[cfg_attr(not(target_arch = "wasm32"), test)]
+            #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
             fn $name() {
                 let options = LineDetectionOptions {
                     vote_threshold: 10,
