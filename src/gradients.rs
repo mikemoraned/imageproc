@@ -250,13 +250,18 @@ fn gradient_magnitude(dx: f32, dy: f32) -> u16 {
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use crate::utils::gray_bench_image;
     use image::{ImageBuffer, Luma};
     use test::{black_box, Bencher};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
     #[rustfmt::skip::macros(gray_image)]
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_gradients_constant_image() {
         let image = ImageBuffer::from_pixel(5, 5, Luma([15u8]));
         let expected = ImageBuffer::from_pixel(5, 5, Luma([0i16]));
@@ -268,7 +273,8 @@ mod tests {
         assert_pixels_eq!(vertical_prewitt(&image), expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_horizontal_sobel_gradient_image() {
         let image = gray_image!(
             3, 2, 1;
@@ -284,7 +290,8 @@ mod tests {
         assert_pixels_eq!(filtered, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_vertical_sobel_gradient_image() {
         let image = gray_image!(
             3, 6, 9;
@@ -300,7 +307,8 @@ mod tests {
         assert_pixels_eq!(filtered, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_horizontal_scharr_gradient_image() {
         let image = gray_image!(
             3, 2, 1;
@@ -316,7 +324,8 @@ mod tests {
         assert_pixels_eq!(filtered, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_vertical_scharr_gradient_image() {
         let image = gray_image!(
             3, 6, 9;
@@ -332,7 +341,8 @@ mod tests {
         assert_pixels_eq!(filtered, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_horizontal_prewitt_gradient_image() {
         let image = gray_image!(
             3, 2, 1;
@@ -348,7 +358,8 @@ mod tests {
         assert_pixels_eq!(filtered, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_vertical_prewitt_gradient_image() {
         let image = gray_image!(
             3, 6, 9;
