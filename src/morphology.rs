@@ -323,12 +323,17 @@ pub fn close_mut(image: &mut GrayImage, norm: Norm, k: u8) {
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use ::test::*;
     use image::{GrayImage, Luma};
     use std::cmp::{max, min};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_dilate_point_l1_1() {
         let image = gray_image!(
               0,   0,   0,   0,   0;
@@ -350,7 +355,8 @@ mod tests {
         assert_pixels_eq!(dilated, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_dilate_point_l1_2() {
         let image = gray_image!(
               0,   0,   0,   0,   0;
@@ -372,7 +378,8 @@ mod tests {
         assert_pixels_eq!(dilated, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_dilate_point_linf_1() {
         let image = gray_image!(
               0,   0,   0,   0,   0;
@@ -394,7 +401,8 @@ mod tests {
         assert_pixels_eq!(dilated, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_dilate_point_linf_2() {
         let image = gray_image!(
               0,   0,   0,   0,   0;
@@ -416,7 +424,8 @@ mod tests {
         assert_pixels_eq!(dilated, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_erode_point_l1_1() {
         let image = gray_image!(
               0,   0,   0,   0,   0;
@@ -438,7 +447,8 @@ mod tests {
         assert_pixels_eq!(eroded, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_erode_point_linf_1() {
         let image = gray_image!(
               0,   0,   0,   0,   0;
