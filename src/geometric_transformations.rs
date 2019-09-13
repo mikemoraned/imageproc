@@ -737,12 +737,17 @@ pub enum Interpolation {
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use crate::utils::gray_bench_image;
     use image::{GrayImage, Luma};
     use test::{black_box, Bencher};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_rotate_nearest_zero_radians() {
         let image = gray_image!(
             00, 01, 02;
@@ -758,7 +763,8 @@ mod tests {
         assert_pixels_eq!(rotated, image);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn text_rotate_nearest_quarter_turn_clockwise() {
         let image = gray_image!(
             00, 01, 02;
@@ -774,7 +780,8 @@ mod tests {
         assert_pixels_eq!(rotated, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn text_rotate_nearest_half_turn_anticlockwise() {
         let image = gray_image!(
             00, 01, 02;
@@ -824,7 +831,8 @@ mod tests {
         });
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_translate_positive_x_positive_y() {
         let image = gray_image!(
             00, 01, 02;
@@ -840,7 +848,8 @@ mod tests {
         assert_pixels_eq!(translated, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_translate_positive_x_negative_y() {
         let image = gray_image!(
             00, 01, 02;
@@ -856,7 +865,8 @@ mod tests {
         assert_pixels_eq!(translated, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_translate_large_x_large_y() {
         let image = gray_image!(
             00, 01, 02;
@@ -882,7 +892,8 @@ mod tests {
         });
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_translate_positive_x_positive_y_projection() {
         let image = gray_image!(
             00, 01, 02;
@@ -903,7 +914,8 @@ mod tests {
         assert_pixels_eq!(translated, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_translate_positive_x_negative_y_projection() {
         let image = gray_image!(
             00, 01, 02;
@@ -924,7 +936,8 @@ mod tests {
         assert_pixels_eq!(translated, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_translate_large_x_large_y_projection() {
         let image = gray_image!(
             00, 01, 02;
@@ -975,7 +988,8 @@ mod tests {
         });
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_affine() {
         let image = gray_image!(
             00, 01, 02;
@@ -1000,7 +1014,8 @@ mod tests {
         assert_pixels_eq!(translated_bilinear, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_affine_bicubic() {
         let image = gray_image!(
             99, 01, 02, 03, 04;
@@ -1079,7 +1094,8 @@ mod tests {
         });
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_from_control_points_translate() {
         let from = [(0f32, 0.0), (50.0, 50.0), (50.0, 0.0), (0.0, 50.0)];
         let to = [(10f32, 5.0), (60.0, 55.0), (60.0, 5.0), (10.0, 55.0)];
@@ -1093,7 +1109,8 @@ mod tests {
         assert_approx_eq!(out.1, 5.0, 1e-10);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_from_control_points() {
         let from = [(0f32, 0.0), (50.0, 50.0), (50.0, 0.0), (0.0, 50.0)];
         let to = [(16f32, 20.0), (50.0, 50.0), (50.0, 0.0), (0.0, 50.0)];
@@ -1107,7 +1124,8 @@ mod tests {
         assert_approx_eq!(out.1, 20.0, 1e-10);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_from_control_points_known_transform() {
         let t = Projection::translate(10f32, 10f32);
         let p = t * Projection::rotate(90f32.to_radians()) * t.invert();
@@ -1128,7 +1146,8 @@ mod tests {
         }
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_from_control_points_colinear() {
         let from = [(0f32, 0.0), (50.0, 50.0), (50.0, 0.0), (0.0, 50.0)];
         let to = [(0f32, 5.0), (0.0, 55.0), (0.0, 5.0), (10.0, 55.0)];
