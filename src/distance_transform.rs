@@ -403,6 +403,8 @@ fn intersection<S: Source + ?Sized>(f: &S, p: usize, q: usize) -> f64 {
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use crate::definitions::Image;
     use crate::property_testing::GrayTestImage;
@@ -412,8 +414,11 @@ mod tests {
     use std::cmp::max;
     use std::f64;
     use test::{black_box, Bencher};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_distance_transform_saturation() {
         // A single foreground pixel in the top-left
         let image = GrayImage::from_fn(300, 300, |x, y| match (x, y) {
@@ -444,28 +449,32 @@ mod tests {
         r
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_distance_transform_1d_constant() {
         let f = vec![0.0, 0.0, 0.0];
         let dists = distance_transform_1d(&f);
         assert_eq!(dists, &[0.0, 0.0, 0.0]);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_distance_transform_1d_descending_gradient() {
         let f = vec![7.0, 5.0, 3.0, 1.0];
         let dists = distance_transform_1d(&f);
         assert_eq!(dists, &[6.0, 4.0, 2.0, 1.0]);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_distance_transform_1d_ascending_gradient() {
         let f = vec![1.0, 3.0, 5.0, 7.0];
         let dists = distance_transform_1d(&f);
         assert_eq!(dists, &[1.0, 2.0, 4.0, 6.0]);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_distance_transform_1d_with_infinities() {
         let f = vec![f64::INFINITY, f64::INFINITY, 5.0, f64::INFINITY];
         let dists = distance_transform_1d(&f);
@@ -488,7 +497,8 @@ mod tests {
         ret
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_distance_transform_1d_matches_reference_implementation() {
         fn prop(f: Vec<f64>) -> bool {
             let expected = distance_transform_1d_reference(&f);
@@ -525,7 +535,8 @@ mod tests {
         dists
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_euclidean_squared_distance_transform_matches_reference_implementation() {
         fn prop(image: GrayTestImage) -> TestResult {
             let expected = euclidean_squared_distance_transform_reference(&image.0);
@@ -538,7 +549,8 @@ mod tests {
         quickcheck(prop as fn(GrayTestImage) -> TestResult);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_euclidean_squared_distance_transform_example() {
         let image = gray_image!(
             1, 0, 0, 0, 0;
