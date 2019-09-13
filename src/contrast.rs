@@ -298,13 +298,18 @@ pub fn stretch_contrast_mut(image: &mut GrayImage, lower: u8, upper: u8) {
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use crate::definitions::{HasBlack, HasWhite};
     use crate::utils::gray_bench_image;
     use image::{GrayImage, Luma};
     use test::{black_box, Bencher};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn adaptive_threshold_constant() {
         let image = GrayImage::from_pixel(3, 3, Luma([100u8]));
         let binary = adaptive_threshold(&image, 1);
@@ -312,7 +317,8 @@ mod tests {
         assert_pixels_eq!(expected, binary);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn adaptive_threshold_one_darker_pixel() {
         for y in 0..3 {
             for x in 0..3 {
@@ -327,7 +333,8 @@ mod tests {
         }
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn adaptive_threshold_one_lighter_pixel() {
         for y in 0..5 {
             for x in 0..5 {
@@ -387,7 +394,8 @@ mod tests {
         });
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_histogram_lut_source_and_target_equal() {
         let mut histc = [0u32; 256];
         for i in 1..histc.len() {
@@ -400,7 +408,8 @@ mod tests {
         assert_eq!(&lut[0..256], &expected[0..256]);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_histogram_lut_gradient_to_step_contrast() {
         let mut grad_histc = [0u32; 256];
         for i in 0..grad_histc.len() {
@@ -441,7 +450,8 @@ mod tests {
         GrayImage::from_pixel(width, height, Luma([intensity]))
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_otsu_constant() {
         // Variance is 0 at any threshold, and we
         // only increase the current threshold if we
@@ -451,7 +461,8 @@ mod tests {
         assert_eq!(otsu_level(&constant_image(10, 10, 255)), 0);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_otsu_level_gradient() {
         let contents = (0u8..26u8).map(|x| x * 10u8).collect();
         let image = GrayImage::from_raw(26, 1, contents).unwrap();
@@ -468,28 +479,32 @@ mod tests {
         });
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_threshold_0_image_0() {
         let expected = 0u8;
         let actual = threshold(&constant_image(10, 10, 0), 0);
         assert_pixels_eq!(actual, constant_image(10, 10, expected));
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_threshold_0_image_1() {
         let expected = 255u8;
         let actual = threshold(&constant_image(10, 10, 1), 0);
         assert_pixels_eq!(actual, constant_image(10, 10, expected));
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_threshold_threshold_255_image_255() {
         let expected = 0u8;
         let actual = threshold(&constant_image(10, 10, 255), 255);
         assert_pixels_eq!(actual, constant_image(10, 10, expected));
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_threshold() {
         let original_contents = (0u8..26u8).map(|x| x * 10u8).collect();
         let original = GrayImage::from_raw(26, 1, original_contents).unwrap();
