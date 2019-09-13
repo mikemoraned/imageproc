@@ -354,10 +354,15 @@ where
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use test::{black_box, Bencher};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_is_corner_fast12_12_contiguous_darker_pixels() {
         let image = gray_image!(
             10, 10, 00, 00, 00, 10, 10;
@@ -371,7 +376,8 @@ mod tests {
         assert_eq!(is_corner_fast12(&image, 8, 3, 3), true);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_is_corner_fast12_12_contiguous_darker_pixels_large_threshold() {
         let image = gray_image!(
             10, 10, 00, 00, 00, 10, 10;
@@ -385,7 +391,8 @@ mod tests {
         assert_eq!(is_corner_fast12(&image, 15, 3, 3), false);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_is_corner_fast12_12_contiguous_lighter_pixels() {
         let image = gray_image!(
             00, 00, 10, 10, 10, 00, 00;
@@ -399,7 +406,8 @@ mod tests {
         assert_eq!(is_corner_fast12(&image, 8, 3, 3), true);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_is_corner_fast12_12_noncontiguous() {
         let image = gray_image!(
             10, 10, 00, 00, 00, 10, 10;
@@ -427,7 +435,8 @@ mod tests {
         b.iter(|| black_box(is_corner_fast12(&image, 8, 3, 3)));
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_is_corner_fast12_near_image_boundary() {
         let image = gray_image!(
             10, 10, 00, 00, 00, 10, 10;
@@ -441,7 +450,8 @@ mod tests {
         assert_eq!(is_corner_fast12(&image, 8, 1, 1), false);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_fast_corner_score_12() {
         let image = gray_image!(
             10, 10, 00, 00, 00, 10, 10;
@@ -459,7 +469,8 @@ mod tests {
         assert_eq!(score, 9);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_is_corner_fast9_9_contiguous_darker_pixels() {
         let image = gray_image!(
             10, 10, 00, 00, 00, 10, 10;
@@ -473,7 +484,8 @@ mod tests {
         assert_eq!(is_corner_fast9(&image, 8, 3, 3), true);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_is_corner_fast9_9_contiguous_lighter_pixels() {
         let image = gray_image!(
             00, 00, 10, 10, 10, 00, 00;
@@ -501,7 +513,8 @@ mod tests {
         b.iter(|| black_box(is_corner_fast9(&image, 8, 3, 3)));
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_is_corner_fast9_12_noncontiguous() {
         let image = gray_image!(
             10, 10, 00, 00, 00, 10, 10;
@@ -515,7 +528,8 @@ mod tests {
         assert_eq!(is_corner_fast9(&image, 8, 3, 3), false);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_corner_score_fast9() {
         // 8 pixels with an intensity diff of 20, then 1 with a diff of 10
         let image = gray_image!(

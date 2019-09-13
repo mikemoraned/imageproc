@@ -183,12 +183,16 @@ where
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
     use super::*;
     use crate::utils::gray_bench_image;
     use image::GrayImage;
     use test::{black_box, Bencher};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     #[should_panic]
     fn match_template_panics_if_image_width_does_is_less_than_template_width() {
         let _ = match_template(
@@ -198,7 +202,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     #[should_panic]
     fn match_template_panics_if_image_height_is_less_than_template_height() {
         let _ = match_template(
@@ -208,7 +213,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn match_template_handles_template_of_same_size_as_image() {
         assert_pixels_eq!(
             match_template(
@@ -220,7 +226,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn match_template_normalization_handles_zero_norm() {
         assert_pixels_eq!(
             match_template(
@@ -232,7 +239,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn match_template_sum_of_squared_errors() {
         let image = gray_image!(
             1, 4, 2;
@@ -253,7 +261,8 @@ mod tests {
         assert_pixels_eq!(actual, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn match_template_sum_of_squared_errors_normalized() {
         let image = gray_image!(
             1, 4, 2;
@@ -279,7 +288,8 @@ mod tests {
         assert_pixels_eq!(actual, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn match_template_cross_correlation() {
         let image = gray_image!(
             1, 4, 2;
@@ -300,7 +310,8 @@ mod tests {
         assert_pixels_eq!(actual, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn match_template_cross_correlation_normalized() {
         let image = gray_image!(
             1, 4, 2;
@@ -377,7 +388,8 @@ mod tests {
         template_size: 16,
         method: MatchTemplateMethod::SumOfSquaredErrorsNormalized);
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_find_extremes() {
         let image = gray_image!(
             10,  7,  8,  1;

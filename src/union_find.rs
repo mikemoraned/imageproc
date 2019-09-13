@@ -107,12 +107,17 @@ impl DisjointSetForest {
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::DisjointSetForest;
     use ::test;
     use rand::distributions::Uniform;
     use rand::prelude::*;
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_trees() {
         //    3         4
         //    |        /  \
@@ -130,7 +135,8 @@ mod tests {
         assert_eq!(forest.trees(), vec![vec![0, 1, 2, 3], vec![4, 5, 6, 7]]);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_union_find_sequence() {
         let mut forest = DisjointSetForest::new(6);
         // 0  1  2  3  4  5

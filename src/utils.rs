@@ -684,9 +684,14 @@ pub fn rgb_bench_image(width: u32, height: u32) -> RgbImage {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    extern crate wasm_bindgen_test;
 
-    #[test]
+    use super::*;
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
+
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_assert_pixels_eq_passes() {
         let image = gray_image!(
             00, 01, 02;
@@ -695,7 +700,8 @@ mod tests {
         assert_pixels_eq!(image, image);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     #[should_panic]
     fn test_assert_pixels_eq_fails() {
         let image = gray_image!(
@@ -709,7 +715,8 @@ mod tests {
         assert_pixels_eq!(diff, image);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_assert_pixels_eq_within_passes() {
         let image = gray_image!(
             00, 01, 02;
@@ -722,7 +729,8 @@ mod tests {
         assert_pixels_eq_within!(diff, image, 1);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     #[should_panic]
     fn test_assert_pixels_eq_within_fails() {
         let image = gray_image!(
@@ -736,7 +744,8 @@ mod tests {
         assert_pixels_eq_within!(diff, image, 1);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_pixel_diff_summary_handles_1x1_image() {
         let summary = pixel_diff_summary(&gray_image!(1), &gray_image!(0));
         assert_eq!(&summary.unwrap()[0..19], "pixels do not match");

@@ -422,12 +422,17 @@ where
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use crate::integral_image::{integral_image, sum_image_pixels};
     use crate::utils::gray_bench_image;
     use ::test;
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_block_sizes() {
         assert_eq!(
             block_sizes(
@@ -459,7 +464,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_feature_positions() {
         assert_eq!(feature_positions(Size::new(2, 3), Size::new(2, 2)), vec![]);
 
@@ -479,7 +485,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_number_of_haar_features() {
         for h in 0..6 {
             for w in 0..6 {
@@ -507,7 +514,8 @@ mod tests {
         let _ = feature.evaluate(&image);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_haar_valid_image_size_top_left() {
         let image = gray_image!(type: u32, 0, 0, 0; 0, 1, 1);
         let feature = HaarFeature {
@@ -537,7 +545,8 @@ mod tests {
         let _ = feature.evaluate(&image);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_haar_valid_image_size_with_offset_feature() {
         let image = gray_image!(type: u32, 0, 0, 0, 0; 0, 1, 1, 1);
         let feature = HaarFeature {
@@ -551,7 +560,8 @@ mod tests {
         assert_eq!(x, 0);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_two_region_horizontal() {
         let image = gray_image!(
             1u8,     2u8, 3u8,     4u8,     5u8;
@@ -573,7 +583,8 @@ mod tests {
         assert_eq!(feature.evaluate(&integral), 14i32);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_three_region_vertical() {
         let image = gray_image!(
         /*****************/
@@ -597,7 +608,8 @@ mod tests {
         assert_eq!(feature.evaluate(&integral), -7i32);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_four_region() {
         let image = gray_image!(
             /*****************************/
@@ -651,7 +663,8 @@ mod tests {
         sum
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_haar_evaluate_against_reference_implementation() {
         for w in 0..6 {
             for h in 0..6 {
@@ -668,7 +681,8 @@ mod tests {
         }
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_draw_haar_feature_two_region_horizontal() {
         let image = gray_image!(
             1u8,     2u8, 3u8,     4u8, 5u8;
@@ -700,7 +714,8 @@ mod tests {
         assert_pixels_eq!(actual, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_draw_haar_feature_four_region() {
         let image = gray_image!(
             /*****************************/

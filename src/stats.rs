@@ -154,11 +154,16 @@ where
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use image::{GrayImage, Luma, Rgb, RgbImage};
     use test::Bencher;
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_cumulative_histogram() {
         let image = gray_image!(1u8, 2u8, 3u8, 2u8, 1u8);
         let hist = cumulative_histogram(&image).channels[0];
@@ -167,7 +172,8 @@ mod tests {
         assert!(hist.iter().skip(4).all(|x| *x == 5));
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_cumulative_histogram_rgb() {
         let image = rgb_image!(
             [1u8, 10u8, 1u8],
@@ -195,7 +201,8 @@ mod tests {
         assert!(b.iter().skip(4).all(|x| *x == 5));
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_histogram() {
         let image = gray_image!(1u8, 2u8, 3u8, 2u8, 1u8);
         let hist = histogram(&image).channels[0];
@@ -203,7 +210,8 @@ mod tests {
         assert_eq!(hist[0..4], [0, 2, 2, 1]);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_histogram_rgb() {
         let image = rgb_image!(
             [1u8, 10u8, 1u8],
@@ -233,7 +241,8 @@ mod tests {
         assert!(b.iter().skip(4).all(|x| *x == 0));
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_root_mean_squared_error_grayscale() {
         let left = gray_image!(
             1, 2, 3;
@@ -248,7 +257,8 @@ mod tests {
         assert_eq!(rms, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_root_mean_squared_error_rgb() {
         let left = rgb_image!([1, 2, 3], [4, 5, 6]);
         let right = rgb_image!([8, 4, 7], [6, 9, 1]);

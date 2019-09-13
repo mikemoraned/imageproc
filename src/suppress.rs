@@ -173,6 +173,8 @@ where
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::{local_maxima, suppress_non_maximum};
     use crate::definitions::{Position, Score};
     use crate::noise::gaussian_noise_mut;
@@ -183,6 +185,8 @@ mod tests {
     use quickcheck::{quickcheck, TestResult};
     use std::cmp;
     use test::Bencher;
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
     #[derive(PartialEq, Debug, Copy, Clone)]
     struct T {
@@ -212,7 +216,8 @@ mod tests {
         }
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_local_maxima() {
         let ts = vec![
             // Suppress vertically
@@ -261,7 +266,8 @@ mod tests {
         b.iter(|| local_maxima(&ts, 15));
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_suppress_non_maximum() {
         let mut image = GrayImage::new(25, 25);
         // Suppress vertically
@@ -285,7 +291,8 @@ mod tests {
         assert_pixels_eq!(actual, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_suppress_non_maximum_handles_radius_greater_than_image_side() {
         // Don't care about output pixels, just want to make sure that
         // we don't go out of bounds when radius exceeds width or height.
@@ -385,7 +392,8 @@ mod tests {
         out
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_suppress_non_maximum_matches_reference_implementation() {
         fn prop(image: GrayTestImage) -> TestResult {
             let expected = suppress_non_maximum_reference(&image.0, 3);
@@ -398,7 +406,8 @@ mod tests {
         quickcheck(prop as fn(GrayTestImage) -> TestResult);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_step() {
         assert_eq!((0u32..5).step(4).collect::<Vec<u32>>(), vec![0, 4]);
         assert_eq!((0u32..4).step(4).collect::<Vec<u32>>(), vec![0]);
