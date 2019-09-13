@@ -649,11 +649,16 @@ pub static MIN_SHIFT: [u8; 256] = [
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use image::{GrayImage, Luma};
     use test::{black_box, Bencher};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_uniform_representative_2() {
         let a = 0b11110000;
         assert_eq!(UNIFORM_REPRESENTATIVE_2[a], 0b00001111);
