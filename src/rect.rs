@@ -165,15 +165,21 @@ impl RectPosition {
 
 #[cfg(test)]
 mod tests {
-    use super::{Rect, Region};
+    extern crate wasm_bindgen_test;
 
-    #[test]
+    use super::{Rect, Region};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
+
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     #[should_panic]
     fn test_rejects_empty_rectangle() {
         Rect::at(1, 2).of_size(0, 1);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_contains_i32() {
         let r = Rect::at(5, 5).of_size(6, 6);
         assert!(r.contains(5, 5));
@@ -182,7 +188,8 @@ mod tests {
         assert!(!r.contains(11, 10));
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_contains_f32() {
         let r = Rect::at(5, 5).of_size(6, 6);
         assert!(r.contains(5f32, 5f32));
