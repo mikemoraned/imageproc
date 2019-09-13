@@ -451,6 +451,8 @@ pub fn column_running_sum(image: &GrayImage, column: u32, buffer: &mut [u32], pa
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use crate::definitions::Image;
     use crate::property_testing::GrayTestImage;
@@ -458,8 +460,11 @@ mod tests {
     use ::test;
     use image::{GenericImage, ImageBuffer, Luma};
     use quickcheck::{quickcheck, TestResult};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_integral_image_gray() {
         let image = gray_image!(
             1, 2, 3;
@@ -473,7 +478,8 @@ mod tests {
         assert_pixels_eq!(integral_image::<_, u32>(&image), expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_integral_image_rgb() {
         let image = rgb_image!(
             [1, 11, 21], [2, 12, 22], [3, 13, 23];
@@ -487,7 +493,8 @@ mod tests {
         assert_pixels_eq!(integral_image::<_, u32>(&image), expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_sum_image_pixels() {
         let image = gray_image!(
             1, 2;
@@ -515,7 +522,8 @@ mod tests {
         assert_eq!(sum_image_pixels(&integral, 1, 1, 1, 1)[0], 4);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_sum_image_pixels_rgb() {
         let image = rgb_image!(
             [1,  2,  3], [ 4,  5,  6];
@@ -587,7 +595,8 @@ mod tests {
         out
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_integral_image_matches_reference_implementation() {
         fn prop(image: GrayTestImage) -> TestResult {
             let expected = integral_image_ref(&image.0);
