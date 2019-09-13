@@ -173,9 +173,14 @@ implement_identity_clamp!(u8, i8, u16, i16, u32, i32, u64, i64, f32, f64);
 
 #[cfg(test)]
 mod tests {
-    use super::Clamp;
+    extern crate wasm_bindgen_test;
 
-    #[test]
+    use super::Clamp;
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
+
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_clamp_f32_u8() {
         let t: u8 = Clamp::clamp(255f32);
         assert_eq!(t, 255u8);
@@ -187,7 +192,8 @@ mod tests {
         assert_eq!(w, 0u8);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_clamp_f32_u16() {
         let t: u16 = Clamp::clamp(65535f32);
         assert_eq!(t, 65535u16);
