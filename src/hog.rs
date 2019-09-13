@@ -497,11 +497,16 @@ fn data_length(lengths: [usize; 3]) -> usize {
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use crate::utils::gray_bench_image;
     use ::test;
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_num_blocks() {
         // -----
         // ***
@@ -521,7 +526,8 @@ mod tests {
         assert_eq!(num_blocks(3, 1, 1), 3);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_hog_spec_valid_options() {
         assert_eq!(
             HogSpec::from_options(40, 40, HogOptions::new(8, true, 5, 2, 1))
@@ -543,7 +549,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_hog_spec_invalid_options() {
         let opts = HogOptions {
             orientations: 8,
@@ -560,7 +567,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_interpolation_from_position() {
         assert_eq!(
             Interpolation::from_position(10f32),
@@ -572,7 +580,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_interpolation_from_position_wrapping() {
         assert_eq!(
             Interpolation::from_position_wrapping(10f32, 11),
@@ -592,7 +601,8 @@ mod tests {
         );
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_hog_descriptor_from_hist_grid() {
         // A grid of cells 3 wide and 2 high. Each cell contains a histogram of 2 items.
         // There are two blocks, the left covering the leftmost 2x2 region, and the
@@ -656,7 +666,8 @@ mod tests {
         assert_eq!(descriptor, expected);
     }
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_direction_interpolation_within_bounds() {
         let image = gray_image!(
 			2, 1, 0;
