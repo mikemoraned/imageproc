@@ -65,11 +65,16 @@ where
 
 #[cfg(test)]
 mod tests {
+    extern crate wasm_bindgen_test;
+
     use super::*;
     use image::{Luma, Rgb};
     use test::{black_box, Bencher};
+    #[cfg(target_arch = "wasm32")]
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[cfg_attr(not(target_arch = "wasm32"), test)]
+    #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_weighted_channel_sum() {
         // Midpoint
         assert_eq!(weighted_channel_sum(10u8, 20u8, 0.5, 0.5), 15u8);
